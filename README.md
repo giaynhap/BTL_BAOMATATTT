@@ -15,7 +15,7 @@ Mã hóa file tại pc1 sử dụng socket gửi qua pc2 giải mã.
 Pc1 là máy gửi file;
 Pc2 là máy nhận file;
 
-tại Pc2 tạo tư mục gõ:
+tại Pc2 gõ:
 ```
 mkdir rev
 ./client -r ./ -k "password"

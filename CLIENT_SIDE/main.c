@@ -87,6 +87,7 @@ int main(int argc,char * argv[])
 {
 
     // phần option 
+    rq.type = -1;
     while (1)
     {
         int opt;
@@ -125,6 +126,8 @@ int main(int argc,char * argv[])
         sender();
     }else  if (rq.type == 0){
         receiver();
+    }else{
+        usage ();
     }
 
     return 0;
