@@ -13,6 +13,9 @@ size_t packet_size = 0;
 size_t conent_size = 0;
 size_t file_read_size = 0;
 
+size_t total_decrypt_time = 0;
+int packet_count = 0;
+
 struct AES_ctx ctx;
 
 char cache_buff[4096];
@@ -23,12 +26,19 @@ void init_decrypt(size_t f_size){
     file_size = f_size;
     packet_size = 0;
     file_read_size = 0;
+    packet_count = 0;
+    total_decrypt_time = 0;
+   
 }
 
 // hàm giải mã  và ghi luôn tới file
 void decrypt_block(void *buff,size_t size,size_t content_size){
+    reset_time();
     AES_CBC_decrypt_buffer(&ctx,buff,size);
+    total_decrypt_time += delta_time();
+
     fwrite(buff,1,content_size,file);
+
 }
 // gọi kết thúc giải mã
 void decrypt_end(){
@@ -44,7 +54,7 @@ int check_packet(){
         packet_size = *((size_t *)cache_buff);
         // kích thước thật của dữ liệu
         conent_size = *((size_t *)(cache_buff+8));
-        printf("recv_packet_size: %ld\n",packet_size);
+        packet_count++;
     }
 
     if (read_size>HEAD_SIZE && packet_size > 0 && read_size - HEAD_SIZE >= packet_size ){
@@ -98,7 +108,12 @@ int decrypt_file(int conn,struct  file_packet_header * header, char key[]){
    act_wait_rev_buff(conn,1024,recv_packet);
    decrypt_end();
 
-   printf("\nDone\n ");
+    printf("Done\n\n================\n");
+    printf("Num of packet: %d ns\n",packet_count);
+    printf("Total decrypt time: %ld ns\n",total_decrypt_time);
+    printf("Average decrypt time: %ld ns\n",total_decrypt_time/packet_count);
+   
+
 }
 
 

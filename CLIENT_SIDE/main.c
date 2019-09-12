@@ -62,7 +62,7 @@ void sender(){
 // hàm nhận thông tin kết nối và xử lý
 int handling_handshake(int sock,void *buff,size_t size){
   struct  file_packet_header * header = (struct file_packet_header *)buff;
-  printf("Rev file: %s\n",header->name);
+  printf("Rev file: %s bytes)\n",header->name);
   printf("\tFile size: %ld\n",header->content_size);
   
   //trả thông tin handshake
@@ -72,7 +72,6 @@ int handling_handshake(int sock,void *buff,size_t size){
   if (decrypt_file(sock,header,rq.key)<0){
       printf("decrypt_file error* ");
   }
-
   
   return 1;
 

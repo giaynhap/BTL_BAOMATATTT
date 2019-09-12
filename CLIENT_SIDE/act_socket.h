@@ -1,4 +1,7 @@
+#include <time.h>
 
+#ifndef ACT_SOCKET_H
+#define ACT_SOCKET_H
 // các hàm socket
 int act_connect(char host[],unsigned int port);
 int act_wait_rev_buff(int socketfd,size_t max_size, int (onrev)(int ,void*,size_t ));
@@ -12,3 +15,7 @@ typedef struct  file_packet_header{
 }  __attribute__((packed,aligned(4))) file_packet_header_t ;
 
 void ex_file_name(char[],char *);
+
+void reset_time();
+size_t delta_time();
+#endif

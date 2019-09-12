@@ -9,10 +9,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #define BUFFERSIZE 512
 #define PROTOPORT 5193
 #pragma comment(lib,"ws2_32.lib")
-
+size_t count_time;
 
 void clear_winsock() {
     #if defined WIN32
@@ -120,4 +121,17 @@ void smart_content_size(size_t size){
 
 	}
 	return i;
+}
+
+void reset_time(){
+    struct timespec ts;
+	timespec_get(&ts, TIME_UTC);
+	count_time = ts.tv_nsec;
+}
+
+size_t delta_time(){
+	struct timespec ts;
+	timespec_get(&ts, TIME_UTC);
+    size_t current =ts.tv_nsec;
+    return current - count_time;
 }

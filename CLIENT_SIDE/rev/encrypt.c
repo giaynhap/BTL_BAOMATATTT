@@ -124,7 +124,7 @@ int send_file(int conn,char key[],char path[]){
     fclose(fp);
     printf("Done\n\n================\n");
      printf("File size %ld bytes\n",sz);
-    printf("Num of packet: %d packet\n",packet_count);
+    printf("Num of packet: %d ns\n",packet_count);
     printf("Total encrypt time: %ld ns\n",total_encrypt_time);
     printf("Average encrypt time: %ld ns\n",total_encrypt_time/packet_count);
     printf("Total transfer time: %ld ns\n",total_send_time);
