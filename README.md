@@ -26,10 +26,14 @@ tại Pc1 gõ:
 ```
 xem kết quả hiện trên terminal.
 ### CLIENT_SIDE folder
+```
 file encrypt.c chứa phần đọc và mã hóa file
 file decrypt.c chứa phần ghi và giải mã file
 file aes.c chứa thuật toán aes (git tiny-aes)
 file sha1.c chứa thuật toán băm sha1 (tạo password)
 file client.c chứa phân xử lý gửi nhận dữ liệu
+```
 ### SERVER_SIDE folder.
+```
 file main.s server chuyển tiếp dữ liệu 2 máy client
+```
