@@ -1,5 +1,5 @@
 # Bài tập lớn ATBMTT
-Hóa hóa file tại pc1 sử dụng socket gửi qua pc2 giải mã
+Mã hóa file tại pc1 sử dụng socket gửi qua pc2 giải mã.
 ## Usage
 ### Build SERVER_SIDE (make)
 1. cd SERVER_SIDE 
@@ -29,9 +29,9 @@ xem kết quả hiện trên terminal.
 ```
 file encrypt.c chứa phần đọc và mã hóa file
 file decrypt.c chứa phần ghi và giải mã file
-file aes.c chứa thuật toán aes (git tiny-aes)
-file sha1.c chứa thuật toán băm sha1 (tạo password)
-file client.c chứa phân xử lý gửi nhận dữ liệu
+file aes.c chứa thuật toán AES (git tiny-aes)
+file sha1.c chứa thuật toán mã băm sha1 (tạo password)
+file client.c chứa phần xử lý gửi nhận dữ liệu
 ```
 ### SERVER_SIDE folder.
 ```
