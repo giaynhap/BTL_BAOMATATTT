@@ -107,8 +107,9 @@ void ex_file_name( char path[],char *name )
 		}
 
     }
-	memcpy(name,path+i+1,sizeof(name));
-	name[len-i-1]=0;
+	memset(name,0,64);
+	memcpy(name,path+i+1,64);
+ 
 }
 
 void smart_content_size(size_t size){

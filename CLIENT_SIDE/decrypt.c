@@ -98,7 +98,7 @@ int decrypt_file(int conn,struct  file_packet_header * header, char key[]){
    act_wait_rev_buff(conn,1024,recv_packet);
    decrypt_end();
 
-   printf("\nDone ");
+   printf("\nDone\n ");
 }
 
 
