@@ -59,6 +59,7 @@ int act_wait_rev_buff(int socketfd,size_t max_size, int (onrev)(int ,void*,size_
 
     void * buf =malloc(max_size);
     size_t bytes;
+	int err = 1;
     while (1) {
 
         if ((bytes= recv(socketfd, buf,max_size, 0)) <= 0) {
@@ -67,12 +68,13 @@ int act_wait_rev_buff(int socketfd,size_t max_size, int (onrev)(int ,void*,size_
 			clear_winsock();
 			return 0;
 		}
-        if (onrev(socketfd,buf,bytes) == 1){
+		err = onrev(socketfd,buf,bytes);
+        if (err != 0){
             break;
         }
     }
     free(buf);
-    return 1;
+    return err;
 }
 
 int act_send_buff(int socketfd,void *buff,size_t len){
@@ -91,3 +93,30 @@ int act_close(int socketfd){
 
 
  
+void ex_file_name( char path[],char *name )
+{
+    if( path == NULL )
+        return NULL;
+	int len = strlen(path);
+	int i = 0;
+    for( i = len-1;i>0 ; i-- )
+    {
+        if( path[i] == '/' || path[i] == '\\' ){
+         
+			break;
+		}
+
+    }
+	memcpy(name,path+i+1,sizeof(name));
+	name[len-i-1]=0;
+}
+
+void smart_content_size(size_t size){
+	size_t i = 1;
+	while(i < size || i<16){
+
+		i = i<<1;
+
+	}
+	return i;
+}

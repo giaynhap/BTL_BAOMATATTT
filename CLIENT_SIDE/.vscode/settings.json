@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stdlib.h": "c",
+        "sha1.h": "c",
+        "aes.h": "c",
+        "act_socket.h": "c"
+    }
+}
