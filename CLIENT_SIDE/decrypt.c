@@ -109,7 +109,7 @@ int decrypt_file(int conn,struct  file_packet_header * header, char key[]){
    decrypt_end();
 
     printf("Done\n\n================\n");
-    printf("Num of packet: %d ns\n",packet_count);
+    printf("Num of packet: %d packet\n",packet_count);
     printf("Total decrypt time: %ld ns\n",total_decrypt_time);
     printf("Average decrypt time: %ld ns\n",total_decrypt_time/packet_count);
    
