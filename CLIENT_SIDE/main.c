@@ -56,7 +56,7 @@ void sender(){
    if ( send_encrypt(sfd,rq.key,rq.path)<0){
        printf("send_file error* ");
    }
-
+   printf ("\n1 giay = %ld ticks\n",CLOCKS_PER_SEC);
 }
 
 // hàm nhận thông tin kết nối và xử lý
@@ -72,7 +72,7 @@ int handling_handshake(int sock,void *buff,size_t size){
   if (decrypt_file(sock,header,rq.key)<0){
       printf("decrypt_file error* ");
   }
-  
+  printf ("\n1 giay = %ld ticks\n",CLOCKS_PER_SEC);
   return 1;
 
 }

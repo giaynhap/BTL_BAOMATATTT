@@ -88,7 +88,8 @@ int encrypt_file(FILE * fp,struct file_packet_header * header,char key[]){
     fclose(fw);
     total_encrypt_time = delta_time();
     printf("Done\n\n================\n");
-    printf("Tong thoi gian ma hoa: %ld ns\n",total_encrypt_time);
+    printf("File luu : %s\n",ENCRYPT_TEMP_FILE);
+    printf("Tong thoi gian ma hoa: %ld ticks\n",total_encrypt_time);
 }
 
 int send_encrypt(int conn,char key[],char path[]){
@@ -128,11 +129,12 @@ int send_encrypt(int conn,char key[],char path[]){
 
     char buffer[1024];
 
-
+    reset_time();
     fp = fopen(ENCRYPT_TEMP_FILE,"rb");
     if (fp < 0 ){
         return -1;
     }
+
     while (!feof(fp))  
     { 
         // đoc file
@@ -143,6 +145,8 @@ int send_encrypt(int conn,char key[],char path[]){
     } 
 
     fclose(fp);
+
+    printf("Tong thoi gian gui file: %ld ticks\n",delta_time());
 }
 // hàm đọc và gửi file
 int send_file(int conn,char key[],char path[]){
@@ -220,10 +224,10 @@ int send_file(int conn,char key[],char path[]){
     printf("Done\n\n================\n");
     printf("File size %ld bytes\n",sz);
     printf("Num of packet: %d packet\n",packet_count);
-    printf("Total encrypt time: %ld ns\n",total_encrypt_time);
-    printf("Average encrypt time: %ld ns\n",total_encrypt_time/packet_count);
-    printf("Total transfer time: %ld ns\n",total_send_time);
-    printf("Average transfer time: %ld ns\n",total_send_time/packet_count);
+    printf("Total encrypt time: %ld ticks\n",total_encrypt_time);
+    printf("Average encrypt time: %ld ticks\n",total_encrypt_time/packet_count);
+    printf("Total transfer time: %ld ticks\n",total_send_time);
+    printf("Average transfer time: %ld ticks\n",total_send_time/packet_count);
     
 }
 

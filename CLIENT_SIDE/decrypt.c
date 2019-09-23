@@ -70,7 +70,6 @@ int check_packet(){
         }
         // gọi giả mã
 
-
         decrypt_block (packet,packet_size,conent_size);
         file_read_size+=packet_size;
         packet_size = 0;
@@ -117,8 +116,8 @@ int decrypt_file(int conn,struct  file_packet_header * header, char key[]){
 
     printf("Done\n\n================\n");
     printf("So luong packet: %d packet\n",packet_count);
-    printf("Tong thoi gian gia ma: %ld ns\n",total_decrypt_time);
-    printf("Trung binh thoi gian gia ma cua 1 packet: %ld ns\n",total_decrypt_time/packet_count);
+    printf("Tong thoi gian gia ma: %ld ticks\n",total_decrypt_time);
+    printf("Trung binh thoi gian gia ma cua 1 packet: %ld ticks\n",total_decrypt_time/packet_count);
    
 
 }
