@@ -7,6 +7,7 @@
 #include "aes.h"
 #include "act_socket.h"
 struct AES_ctx ctx;
+#define ENCRYPT_TEMP_FILE "./temp.encrypt.alt"
 
 // hàm tạo password 
 void generate_password(char pass[],char *out){
@@ -50,6 +51,99 @@ int handshake_handle(int conn,void* buff,size_t  size){
     return 1;
 }
 
+int encrypt_file(FILE * fp,struct file_packet_header * header,char key[]){
+
+    char buffer[2048];
+    // tạo password
+    char hash_password[21];
+    generate_password(key,hash_password);
+
+    printf("Password ");
+    print_password_hash(hash_password);
+    printf("\n");
+
+    size_t total_encrypt_time=0;
+ 
+    int packet_count =0;
+    // đọc và mã hóa
+    AES_init_ctx_iv(&ctx, hash_password,header->iv);
+    FILE *fw = fopen(ENCRYPT_TEMP_FILE,"wb");
+    if (fw < 0){
+        return -1;
+    }
+    reset_time();
+    while (!feof(fp))  
+    { 
+        memset(buffer,0,sizeof(buffer));
+        // đoc file
+        size_t bytes = fread(buffer, 1, sizeof(buffer), fp); 
+        size_t encrypt_size = sizeof(buffer);
+        if (bytes < encrypt_size)
+        {
+            encrypt_size = smart_content_size(bytes);
+        }
+        encrtpy_block(buffer,encrypt_size,hash_password);
+        fwrite(buffer,1,encrypt_size,fw);
+    } 
+    fclose(fw);
+    total_encrypt_time = delta_time();
+    printf("Done\n\n================\n");
+    printf("Tong thoi gian ma hoa: %ld ns\n",total_encrypt_time);
+}
+
+int send_encrypt(int conn,char key[],char path[]){
+    
+    printf("Initializing\n");  
+    size_t total_encrypt_time=0;
+    size_t total_send_time = 0;
+    FILE *fp;
+    fp = fopen(path,"rb");
+    if (fp < 0 ){
+        return -1;
+    }
+    fseek(fp, 0L, SEEK_END);
+    // lấy kích thước file
+    size_t sz = ftell(fp);
+    fseek(fp, 0L, SEEK_SET);
+
+    char file_name[64] ;
+  
+    // lấy tên file
+    ex_file_name(path,file_name);
+    struct file_packet_header phandshake ;
+
+    // tạo kết nối gửi thông tin file cho máy 2
+    make_package_header(sz,file_name,&phandshake);
+    phandshake.type = 1;
+    act_send_buff(conn,&phandshake,sizeof(struct file_packet_header));
+    if (act_wait_rev_buff(conn,1024, handshake_handle) != 1){
+        return -2;
+    }
+    if (encrypt_file(fp,&phandshake,key) < 0 ){
+        fclose(fp);
+        return -1;
+    }
+
+    fclose(fp);
+
+    char buffer[1024];
+
+
+    fp = fopen(ENCRYPT_TEMP_FILE,"rb");
+    if (fp < 0 ){
+        return -1;
+    }
+    while (!feof(fp))  
+    { 
+        // đoc file
+        size_t bytes = fread(buffer, 1, sizeof(buffer), fp); 
+        act_send_buff(conn,&(bytes),8);
+        act_send_buff(conn,&(bytes),8);
+        act_send_buff(conn,buffer,bytes);   
+    } 
+
+    fclose(fp);
+}
 // hàm đọc và gửi file
 int send_file(int conn,char key[],char path[]){
 
@@ -73,6 +167,7 @@ int send_file(int conn,char key[],char path[]){
 
     // tạo kết nối gửi thông tin file cho máy 2
     make_package_header(sz,file_name,&phandshake);
+    phandshake.type = 0; 
     act_send_buff(conn,&phandshake,sizeof(struct file_packet_header));
     if (act_wait_rev_buff(conn,1024, handshake_handle) != 1){
         return -2;
@@ -123,7 +218,7 @@ int send_file(int conn,char key[],char path[]){
 
     fclose(fp);
     printf("Done\n\n================\n");
-     printf("File size %ld bytes\n",sz);
+    printf("File size %ld bytes\n",sz);
     printf("Num of packet: %d packet\n",packet_count);
     printf("Total encrypt time: %ld ns\n",total_encrypt_time);
     printf("Average encrypt time: %ld ns\n",total_encrypt_time/packet_count);

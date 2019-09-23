@@ -12,6 +12,7 @@ typedef struct  file_packet_header{
     char name[64];
     char iv[16];
     long content_size;
+    char type;
 }  __attribute__((packed,aligned(4))) file_packet_header_t ;
 
 void ex_file_name(char[],char *);

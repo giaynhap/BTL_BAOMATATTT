@@ -34,11 +34,12 @@ void init_decrypt(size_t f_size){
 // hàm giải mã  và ghi luôn tới file
 void decrypt_block(void *buff,size_t size,size_t content_size){
     reset_time();
+    
+ 
     AES_CBC_decrypt_buffer(&ctx,buff,size);
     total_decrypt_time += delta_time();
-
+    
     fwrite(buff,1,content_size,file);
-
 }
 // gọi kết thúc giải mã
 void decrypt_end(){
@@ -63,7 +64,13 @@ int check_packet(){
         memcpy(packet,cache_buff+HEAD_SIZE,packet_size);
         read_size -= (HEAD_SIZE + packet_size);
         memcpy(cache_buff,cache_buff+HEAD_SIZE+packet_size,read_size);
+
+        if (file_read_size+packet_size >=file_size){
+            conent_size = packet_size- (file_read_size+packet_size -file_size );
+        }
         // gọi giả mã
+
+
         decrypt_block (packet,packet_size,conent_size);
         file_read_size+=packet_size;
         packet_size = 0;
@@ -92,7 +99,7 @@ int decrypt_file(int conn,struct  file_packet_header * header, char key[]){
    char hash_password[21];
    generate_password(key,hash_password);
   
-    printf("password ");
+    printf("Password ");
     print_password_hash(hash_password);
     printf("\n");
 
@@ -109,9 +116,9 @@ int decrypt_file(int conn,struct  file_packet_header * header, char key[]){
    decrypt_end();
 
     printf("Done\n\n================\n");
-    printf("Num of packet: %d packet\n",packet_count);
-    printf("Total decrypt time: %ld ns\n",total_decrypt_time);
-    printf("Average decrypt time: %ld ns\n",total_decrypt_time/packet_count);
+    printf("So luong packet: %d packet\n",packet_count);
+    printf("Tong thoi gian gia ma: %ld ns\n",total_decrypt_time);
+    printf("Trung binh thoi gian gia ma cua 1 packet: %ld ns\n",total_decrypt_time/packet_count);
    
 
 }

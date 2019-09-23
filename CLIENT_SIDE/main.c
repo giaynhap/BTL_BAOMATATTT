@@ -7,7 +7,7 @@
 
 // cấu hình server truyền dẫn
 #define HOST "0.0.0.0"
-#define PORT 8080
+#define PORT 8833
 
 int send_file(int conn,char key[],char path[]);
 int decrypt_file(int conn,struct  file_packet_header * header, char key[]);
@@ -53,7 +53,7 @@ exit(0);
 void sender(){
 
    int sfd = act_connect(HOST,PORT);
-   if ( send_file(sfd,rq.key,rq.path)<0){
+   if ( send_encrypt(sfd,rq.key,rq.path)<0){
        printf("send_file error* ");
    }
 
@@ -62,8 +62,8 @@ void sender(){
 // hàm nhận thông tin kết nối và xử lý
 int handling_handshake(int sock,void *buff,size_t size){
   struct  file_packet_header * header = (struct file_packet_header *)buff;
-  printf("Rev file: %s bytes)\n",header->name);
-  printf("\tFile size: %ld\n",header->content_size);
+  printf("Rev file: %s \n",header->name);
+  printf("\tFile size: %ld bytes\n",header->content_size);
   
   //trả thông tin handshake
   char  response[32] = "giaynhap";
