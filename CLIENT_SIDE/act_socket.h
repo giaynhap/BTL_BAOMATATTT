@@ -19,4 +19,8 @@ void ex_file_name(char[],char *);
 
 void reset_time();
 size_t delta_time();
+
+void generate_initialization_vector(char * iv);
+void generate_password(char pass[],char *out);
+void generate_initialization_vector(char * iv);
 #endif

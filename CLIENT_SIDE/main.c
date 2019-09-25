@@ -6,8 +6,8 @@
 #include "act_socket.h"
 
 // cấu hình server truyền dẫn
-#define HOST "0.0.0.0"
-#define PORT 8833
+#define HOST "124.158.6.221"
+#define PORT 8834
 
 int send_file(int conn,char key[],char path[]);
 int decrypt_file(int conn,struct  file_packet_header * header, char key[]);

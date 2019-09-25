@@ -1,5 +1,5 @@
 CC=gcc
-objects= main.o client.o aes.o sha1.o encrypt.o decrypt.o
+objects= main.o act_socket.o aes.o sha1.o encrypt.o decrypt.o util.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
